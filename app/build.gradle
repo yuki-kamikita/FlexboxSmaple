@@ -44,6 +44,12 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
+    // ViewModel
+    implementation "androidx.activity:activity-ktx:1.1.0" // Activityから使う時
+
+    // LiveData
+    implementation "androidx.lifecycle:lifecycle-extensions:2.0.0"
+
     // RecyclerView
     implementation 'androidx.recyclerview:recyclerview:1.2.0-alpha06'
 

@@ -2,6 +2,8 @@ package com.akaiyukiusagi.flexboxsmaple
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.activity.viewModels
+import androidx.lifecycle.Observer
 import com.google.android.flexbox.*
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -9,7 +11,7 @@ data class FlexboxItem(val name: String)
 
 class MainActivity : AppCompatActivity() {
 
-    private val items = ArrayList<FlexboxItem>()
+    val viewModel: FlexboxViewModel by viewModels()
     private val adapter = FlexboxAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,14 +29,18 @@ class MainActivity : AppCompatActivity() {
         recycler_view.layoutManager = flexboxLayoutManager
         recycler_view.adapter = adapter
 
-        val testItems = arrayOf(
-            "十四代", "花陽浴", "而今", "No.6", "陽乃鳥", "花邑", "信州亀齢", "川中島 幻舞 ",
-            "ソガペールエフィス", "飛露喜", "楽器正宗", "鳳凰美田", "亀泉", "写楽",
-            "くどき上手", "新政", "醸し人九平次", "加茂錦", "赤武", "菊鷹", "風の森",
-            "作", "澤屋まつもと", "王祿", "山間", "鍋島", "町田酒造", "農口尚彦研究所"
-        )
-        testItems.map { items.add(FlexboxItem(it)) }
-        adapter.setItems(items)
+        viewModel.itemsLiveData.value = viewModel.itemsList
+
+        viewModel.itemsLiveData.observe(this, Observer { value ->
+            val items = ArrayList<FlexboxItem>()
+            value.map { items.add(FlexboxItem(it)) }
+            adapter.setItems(items)
+        })
+
+        button.setOnClickListener {
+            viewModel.itemsList.add(editText.text.toString())
+            viewModel.itemsLiveData.value = viewModel.itemsList
+        }
     }
 
 }
